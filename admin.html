@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>Admin Dashboard</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="products.html">Store</a>
+        <a href="admin.html">Admin</a>
+    </nav>
+</header>
+
+<section class="admin-section">
+
+    <h2>Inventory</h2>
+    <table id="inventory-table"></table>
+
+    <h3>Add New Product</h3>
+    <input type="text" id="newName" placeholder="Product name">
+    <input type="number" id="newPrice" placeholder="Price">
+    <input type="number" id="newStock" placeholder="Stock">
+    <button onclick="addProduct()">Add Product</button>
+
+    <h2>Orders</h2>
+    <div id="orders-list"></div>
+
+</section>
+
+<script src="admin.js"></script>
+</body>
+</html>
