@@ -1,0 +1,68 @@
+let products = JSON.parse(localStorage.getItem("products")) || [];
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+function save() {
+    localStorage.setItem("products", JSON.stringify(products));
+    localStorage.setItem("orders", JSON.stringify(orders));
+}
+
+// ----- INVENTORY -----
+let table = document.getElementById("inventory-table");
+
+function loadInventory() {
+    table.innerHTML = `
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Stock</th>
+        </tr>
+    `;
+
+    products.forEach(p => {
+        table.innerHTML += `
+            <tr>
+                <td>${p.name}</td>
+                <td>$${p.price}</td>
+                <td>${p.stock}</td>
+            </tr>
+        `;
+    });
+}
+
+// Add product
+function addProduct() {
+    let name = document.getElementById("newName").value;
+    let price = document.getElementById("newPrice").value;
+    let stock = document.getElementById("newStock").value;
+
+    products.push({ name, price: Number(price), stock: Number(stock) });
+    save();
+    loadInventory();
+    alert("Product added!");
+}
+
+// ----- ORDERS -----
+let ordersList = document.getElementById("orders-list");
+
+function loadOrders() {
+    ordersList.innerHTML = "";
+
+    orders.forEach((o, i) => {
+        let div = document.createElement("div");
+        div.className = "order-box";
+
+        let items = o.items.map(it => `${it.name} ($${it.price})`).join(", ");
+
+        div.innerHTML = `
+            <p><b>Order #${i+1}</b></p>
+            <p>Items: ${items}</p>
+            <p>Date: ${o.date}</p>
+            <hr>
+        `;
+
+        ordersList.appendChild(div);
+    });
+}
+
+loadInventory();
+loadOrders();
