@@ -1,0 +1,74 @@
+// Load products
+let products = JSON.parse(localStorage.getItem("products")) || [
+    { name: "Product A", price: 10, stock: 5 },
+    { name: "Product B", price: 25, stock: 2 }
+];
+
+// Save products back
+function saveProducts() {
+    localStorage.setItem("products", JSON.stringify(products));
+}
+
+// Display product list
+let productList = document.getElementById("product-list");
+if (productList) {
+    products.forEach((prod, index) => {
+        let div = document.createElement("div");
+        div.className = "product-card";
+
+        div.innerHTML = `
+            <h3>${prod.name}</h3>
+            <p>Price: $${prod.price}</p>
+            <p class="stock">Stock: ${prod.stock}</p>
+            <button onclick="addToCart(${index})">Add to Cart</button>
+        `;
+
+        productList.appendChild(div);
+    });
+}
+
+let cart = [];
+
+function addToCart(index) {
+    if (products[index].stock > 0) {
+        cart.push(products[index]);
+        updateCart();
+    } else {
+        alert("Out of stock!");
+    }
+}
+
+function updateCart() {
+    let cartList = document.getElementById("cart-list");
+    cartList.innerHTML = "";
+
+    cart.forEach(item => {
+        let li = document.createElement("li");
+        li.textContent = `${item.name} - $${item.price}`;
+        cartList.appendChild(li);
+    });
+}
+
+function placeOrder() {
+    if (cart.length === 0) return alert("Cart is empty!");
+
+    let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+    orders.push({
+        items: cart,
+        date: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("orders", JSON.stringify(orders));
+
+    cart.forEach(c => {
+        let p = products.find(p => p.name === c.name);
+        p.stock--;
+    });
+
+    saveProducts();
+    alert("Order placed!");
+    cart = [];
+    updateCart();
+    location.reload();
+}
